@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ateliê Santos & Bolsos</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --cream: #f5f0e8;
+    --warm-white: #faf8f3;
+    --charcoal: #1a1814;
+    --deep-brown: #2c2318;
+    --gold: #c9a84c;
+    --gold-light: #e8c87a;
+    --gold-pale: #f5e9c8;
+    --terracotta: #8b4a2f;
+    --sage: #5a6b4e;
+    --thread-red: #9b2c2c;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--warm-white);
+    color: var(--charcoal);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+  }
+
+  /* ---- NOISE TEXTURE OVERLAY ---- */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.4;
+  }
+
+  /* ---- HEADER / NAV ---- */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 1.2rem 4rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(250, 248, 243, 0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    transition: all 0.3s;
+  }
+
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: var(--charcoal);
+    letter-spacing: -0.02em;
+  }
+
+  .nav-logo span { color: var(--gold); }
+
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--deep-brown);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.3s;
+  }
+
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -3px; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.3s;
+  }
+
+  .nav-links a:hover { color: var(--gold); }
+  .nav-links a:hover::after { width: 100%; }
+
+  .nav-cta {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-white);
+    background: var(--charcoal);
+    border: none;
+    padding: 0.7rem 1.8rem;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .nav-cta:hover { background: var(--gold); color: var(--charcoal); }
+
+  /* ---- HERO ---- */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6rem 4rem 6rem 6rem;
+    position: relative;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 40px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 5vw, 5.5rem);
+    font-weight: 900;
+    line-height: 1.05;
+    color: var(--charcoal);
+    margin-bottom: 0.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--terracotta);
+    display: block;
+  }
+
+  .hero-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--deep-brown);
+    border-left: 3px solid var(--gold);
+    padding-left: 1.5rem;
+    margin: 2.5rem 0 3rem;
+    line-height: 1.6;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  .hero-tagline strong { font-weight: 600; font-style: normal; color: var(--charcoal); }
+
+  .hero-desc {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #5a5040;
+    max-width: 440px;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+
+  .btn-primary {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--warm-white);
+    background: var(--charcoal);
+    padding: 1rem 2.5rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { background: var(--gold); color: var(--charcoal); transform: translateY(-2px); }
+
+  .btn-secondary {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--deep-brown);
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    cursor: pointer;
+    transition: color 0.3s;
+    background: none;
+    border: none;
+  }
+
+  .btn-secondary:hover { color: var(--gold); }
+
+  /* Hero right panel */
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+    background: var(--charcoal);
+  }
+
+  .hero-right-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 4rem;
+  }
+
+  /* Decorative fabric pattern */
+  .fabric-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 12px,
+        rgba(201,168,76,0.06) 12px,
+        rgba(201,168,76,0.06) 13px
+      ),
+      repeating-linear-gradient(
+        -45deg,
+        transparent,
+        transparent 12px,
+        rgba(201,168,76,0.06) 12px,
+        rgba(201,168,76,0.06) 13px
+      ),
+      linear-gradient(135deg, #2c2318 0%, #1a1814 60%, #0d0b09 100%);
+  }
+
+  /* Animated thread lines */
+  .thread-lines {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .thread {
+    position: absolute;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, rgba(201,168,76,0.4), transparent);
+    animation: threadFlow 8s ease-in-out infinite;
+  }
+
+  .thread:nth-child(1) { left: 20%; height: 60%; top: -10%; animation-delay: 0s; }
+  .thread:nth-child(2) { left: 40%; height: 80%; top: -20%; animation-delay: 2s; }
+  .thread:nth-child(3) { left: 65%; height: 50%; top: -5%; animation-delay: 4s; }
+  .thread:nth-child(4) { left: 80%; height: 70%; top: -15%; animation-delay: 1s; }
+
+  @keyframes threadFlow {
+    0%, 100% { transform: translateY(0) scaleX(1); opacity: 0.3; }
+    50% { transform: translateY(120%) scaleX(1.5); opacity: 0.8; }
+  }
+
+  /* Big decorative number */
+  .hero-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 20rem;
+    font-weight: 900;
+    color: rgba(201,168,76,0.05);
+    position: absolute;
+    top: -2rem;
+    right: -2rem;
+    line-height: 1;
+    user-select: none;
+  }
+
+  .hero-badge {
+    position: relative;
+    z-index: 2;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.3);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin-bottom: 2rem;
+    animation: rotateBadge 20s linear infinite;
+  }
+
+  @keyframes rotateBadge {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .badge-inner {
+    animation: rotateBadge 20s linear infinite reverse;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .badge-icon { font-size: 2.5rem; margin-bottom: 0.3rem; }
+
+  .badge-text {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.6rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .hero-stat-row {
+    display: flex;
+    gap: 2rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  .hero-stat {
+    border-top: 1px solid rgba(201,168,76,0.3);
+    padding-top: 1rem;
+  }
+
+  .stat-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--gold);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.6);
+    margin-top: 0.3rem;
+  }
+
+  /* ---- MARQUEE ---- */
+  .marquee-wrap {
+    background: var(--gold);
+    padding: 0.8rem 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .marquee-track {
+    display: flex;
+    gap: 3rem;
+    animation: marquee 20s linear infinite;
+    white-space: nowrap;
+  }
+
+  .marquee-item {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.85rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--charcoal);
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+  }
+
+  .marquee-dot {
+    width: 4px; height: 4px;
+    background: var(--charcoal);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ---- SECTIONS COMMON ---- */
+  section { padding: 7rem 6rem; }
+
+  .section-eyebrow {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .section-eyebrow::after {
+    content: '';
+    flex: 1;
+    max-width: 60px;
+    height: 1px;
+    background: var(--gold);
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    line-height: 1.1;
+    color: var(--charcoal);
+    margin-bottom: 1.5rem;
+  }
+
+  .section-title em { font-style: italic; color: var(--terracotta); }
+
+  /* ---- ABOUT / FRASE ---- */
+  .about {
+    background: var(--charcoal);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .about::before {
+    content: '';
+    position: absolute;
+    top: -100px; right: -100px;
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.1);
+    pointer-events: none;
+  }
+
+  .about::after {
+    content: '';
+    position: absolute;
+    bottom: -150px; left: -150px;
+    width: 500px; height: 500px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.07);
+    pointer-events: none;
+  }
+
+  .about .section-eyebrow { color: var(--gold-light); }
+  .about .section-eyebrow::after { background: var(--gold-light); }
+
+  .about .section-title { color: var(--cream); }
+
+  .about-quote {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    font-style: italic;
+    font-weight: 400;
+    color: var(--gold-light);
+    line-height: 1.4;
+    position: relative;
+    padding-left: 2rem;
+    border-left: 4px solid var(--gold);
+  }
+
+  .about-body {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.9;
+    color: rgba(245,240,232,0.7);
+    margin-top: 2rem;
+  }
+
+  .about-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .about-feature {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+    padding: 1.5rem;
+    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(201,168,76,0.03);
+    transition: all 0.3s;
+  }
+
+  .about-feature:hover {
+    border-color: rgba(201,168,76,0.4);
+    background: rgba(201,168,76,0.07);
+    transform: translateX(8px);
+  }
+
+  .feature-icon {
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    width: 50px;
+    text-align: center;
+  }
+
+  .feature-content h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--gold-light);
+    margin-bottom: 0.4rem;
+  }
+
+  .feature-content p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.6);
+    line-height: 1.6;
+  }
+
+  /* ---- SERVICES ---- */
+  .services {
+    background: var(--cream);
+    position: relative;
+  }
+
+  .services-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    margin-bottom: 5rem;
+    align-items: end;
+  }
+
+  .services-desc {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: #5a5040;
+    align-self: end;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    background: rgba(26,24,20,0.1);
+  }
+
+  .service-card {
+    background: var(--warm-white);
+    padding: 3rem 2.5rem;
+    position: relative;
+    overflow: hidden;
+    cursor: default;
+    transition: all 0.4s;
+    group: true;
+  }
+
+  .service-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 0;
+    background: var(--charcoal);
+    transition: height 0.4s ease;
+    z-index: 0;
+  }
+
+  .service-card:hover::before { height: 100%; }
+
+  .service-card > * { position: relative; z-index: 1; }
+
+  .service-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    font-weight: 900;
+    color: rgba(26,24,20,0.06);
+    line-height: 1;
+    margin-bottom: -1rem;
+    transition: color 0.4s;
+  }
+
+  .service-card:hover .service-num { color: rgba(201,168,76,0.15); }
+
+  .service-icon { font-size: 2rem; margin-bottom: 1rem; }
+
+  .service-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    margin-bottom: 1rem;
+    transition: color 0.4s;
+  }
+
+  .service-card:hover .service-name { color: var(--gold-light); }
+
+  .service-desc {
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: #6a5f50;
+    transition: color 0.4s;
+  }
+
+  .service-card:hover .service-desc { color: rgba(245,240,232,0.7); }
+
+  .service-tag {
+    display: inline-block;
+    margin-top: 1.5rem;
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--gold);
+    border-bottom: 1px solid var(--gold);
+    padding-bottom: 2px;
+    transition: all 0.4s;
+  }
+
+  .service-card:hover .service-tag { color: var(--gold-light); border-color: var(--gold-light); }
+
+  /* ---- PRICES ---- */
+  .prices {
+    background: var(--warm-white);
+    position: relative;
+  }
+
+  .prices-layout {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6rem;
+    align-items: start;
+  }
+
+  .prices-left {
+    position: sticky;
+    top: 120px;
+  }
+
+  .prices-note {
+    margin-top: 2rem;
+    padding: 1.5rem;
+    background: var(--gold-pale);
+    border-left: 3px solid var(--gold);
+    font-size: 0.95rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--deep-brown);
+    line-height: 1.7;
+  }
+
+  .price-list { display: flex; flex-direction: column; gap: 1px; }
+
+  .price-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 2rem 2.5rem;
+    background: var(--cream);
+    border-left: 3px solid transparent;
+    transition: all 0.3s;
+    gap: 1rem;
+  }
+
+  .price-item:hover {
+    border-left-color: var(--gold);
+    background: var(--gold-pale);
+    transform: translateX(4px);
+  }
+
+  .price-item-left { display: flex; flex-direction: column; gap: 0.4rem; }
+
+  .price-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+
+  .price-detail {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: #8a7a66;
+    font-style: italic;
+  }
+
+  .price-tag {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .price-from {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.65rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.2rem;
+  }
+
+  .price-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--charcoal);
+    line-height: 1;
+  }
+
+  .price-currency {
+    font-size: 1rem;
+    font-weight: 400;
+    vertical-align: super;
+    color: var(--terracotta);
+  }
+
+  /* ---- DELIVERY BANNER ---- */
+  .delivery-banner {
+    background: var(--terracotta);
+    padding: 5rem 6rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .delivery-banner::before {
+    content: '🚗';
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 15rem;
+    opacity: 0.06;
+    pointer-events: none;
+  }
+
+  .delivery-banner .section-eyebrow { color: rgba(245,240,232,0.7); }
+  .delivery-banner .section-eyebrow::after { background: rgba(245,240,232,0.7); }
+
+  .delivery-banner .section-title { color: var(--warm-white); }
+
+  .delivery-body {
+    font-size: 1.15rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: rgba(245,240,232,0.8);
+  }
+
+  .delivery-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .delivery-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(245,240,232,0.1);
+    border: 1px solid rgba(245,240,232,0.15);
+    transition: all 0.3s;
+  }
+
+  .delivery-step:hover { background: rgba(245,240,232,0.15); transform: translateX(6px); }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: rgba(245,240,232,0.3);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+
+  .step-content h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--warm-white);
+    margin-bottom: 0.3rem;
+  }
+
+  .step-content p {
+    font-size: 0.95rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.7);
+    line-height: 1.5;
+  }
+
+  /* ---- CTA ---- */
+  .cta-section {
+    background: var(--charcoal);
+    text-align: center;
+    padding: 8rem 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .cta-section::before {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 600px; height: 600px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.08);
+    pointer-events: none;
+  }
+
+  .cta-section::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,168,76,0.12);
+    pointer-events: none;
+  }
+
+  .cta-pre {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 900;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 2rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-title em { font-style: italic; color: var(--gold-light); }
+
+  .cta-body {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.6);
+    max-width: 500px;
+    margin: 0 auto 3rem;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .btn-whatsapp {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    background: var(--gold);
+    padding: 1.1rem 3rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+
+  .btn-whatsapp:hover { background: var(--gold-light); transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+
+  .btn-outline {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--cream);
+    background: transparent;
+    padding: 1.1rem 3rem;
+    border: 1px solid rgba(245,240,232,0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+    text-decoration: none;
+  }
+
+  .btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ---- FOOTER ---- */
+  footer {
+    background: var(--deep-brown);
+    padding: 4rem 6rem 2rem;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 4rem;
+    padding-bottom: 3rem;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    margin-bottom: 2rem;
+  }
+
+  .footer-brand {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+
+  .footer-brand span { color: var(--gold); }
+
+  .footer-tagline {
+    font-size: 0.95rem;
+    font-style: italic;
+    font-weight: 300;
+    color: rgba(245,240,232,0.5);
+    line-height: 1.7;
+  }
+
+  .footer-col h5 {
+    font-family: 'Raleway', sans-serif;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.2rem;
+  }
+
+  .footer-col ul { list-style: none; }
+
+  .footer-col ul li {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.55);
+    margin-bottom: 0.6rem;
+    line-height: 1.5;
+  }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .footer-copy {
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.3);
+  }
+
+  /* ---- SCROLL REVEAL ---- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ---- ANIMATIONS ---- */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ---- RESPONSIVE ---- */
+  @media (max-width: 1100px) {
+    nav { padding: 1rem 2rem; }
+    .nav-links { display: none; }
+    section { padding: 5rem 3rem; }
+    .hero { grid-template-columns: 1fr; }
+    .hero-right { display: none; }
+    .about { grid-template-columns: 1fr; gap: 3rem; }
+    .services-grid { grid-template-columns: 1fr; gap: 2px; }
+    .services-header { grid-template-columns: 1fr; }
+    .prices-layout { grid-template-columns: 1fr; }
+    .prices-left { position: static; }
+    .delivery-banner { grid-template-columns: 1fr; gap: 3rem; }
+    .footer-top { grid-template-columns: 1fr; gap: 2rem; }
+    .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Ateliê Santos<span>&</span>Bolsos</div>
+  <ul class="nav-links">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#precos">Preços</a></li>
+    <li><a href="#coleta">Coleta</a></li>
+  </ul>
+  <a href="https://wa.me/5541995777474" class="nav-cta">Solicitar Orçamento</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Ateliê de Costura</div>
+    <h1 class="hero-title">
+      Conserto
+      <em>Profissional</em>
+    </h1>
+    <blockquote class="hero-tagline">
+      <strong>"Consertamos aquilo que<br>o tempo rasga."</strong>
+    </blockquote>
+    <p class="hero-desc">
+      Qualidade, cuidado e atenção em cada ponto. Especialistas em calças e jaquetas — com serviço de coleta e entrega em domicílio para sua comodidade.
+    </p>
+    <div class="hero-actions">
+      <a href="https://wa.me/5541995777474 class="btn-primary">📱 Chamar no WhatsApp</a>
+      <a href="#precos" class="btn-secondary">Ver tabela de preços →</a>
+    </div>
+  </div>
+
+  <div class="hero-right">
+    <div class="fabric-bg"></div>
+    <div class="thread-lines">
+      <div class="thread"></div>
+      <div class="thread"></div>
+      <div class="thread"></div>
+      <div class="thread"></div>
+    </div>
+    <div class="hero-number">✂</div>
+    <div class="hero-right-inner">
+      <div class="hero-badge">
+        <div class="badge-inner">
+          <div class="badge-icon">🪡</div>
+          <div class="badge-text">Costura<br>Artesanal<br>Profissional</div>
+        </div>
+      </div>
+      <div class="hero-stat-row">
+        <div class="hero-stat">
+          <div class="stat-num">100%</div>
+          <div class="stat-label">Satisfação<br>Garantida</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-num">🏠</div>
+          <div class="stat-label">Coleta &<br>Entrega</div>
+        </div>
+        <div class="hero-stat">
+          <div class="stat-num">24h</div>
+          <div class="stat-label">Retorno<br>Rápido</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">✂ Barras de Calça <span class="marquee-dot"></span></span>
+    <span class="marquee-item">🧵 Cerzido de Jeans <span class="marquee-dot"></span></span>
+    <span class="marquee-item">🔒 Troca de Zíper <span class="marquee-dot"></span></span>
+    <span class="marquee-item">🧥 Conserto de Jaquetas <span class="marquee-dot"></span></span>
+    <span class="marquee-item">📦 Coleta em Domicílio <span class="marquee-dot"></span></span>
+    <span class="marquee-item">⭐ Ajustes Personalizados <span class="marquee-dot"></span></span>
+    <span class="marquee-item">🔩 Rebitagem & Forro de Bolso <span class="marquee-dot"></span></span>
+    <span class="marquee-item">✂ Barras de Calça <span class="marquee-dot"></span></span>
+    <span class="marquee-item">🧵 Cerzido de Jeans <span class="marquee-dot"></span></span>
+    <span class="marquee-item">🔒 Troca de Zíper <span class="marquee-dot"></span></span>
+    <span class="marquee-item">🧥 Conserto de Jaquetas <span class="marquee-dot"></span></span>
+    <span class="marquee-item">📦 Coleta em Domicílio <span class="marquee-dot"></span></span>
+    <span class="marquee-item">⭐ Ajustes Personalizados <span class="marquee-dot"></span></span>
+    <span class="marquee-item">🔩 Rebitagem & Forro de Bolso <span class="marquee-dot"></span></span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="about" id="sobre">
+  <div class="about-left">
+    <div class="section-eyebrow reveal">Nossa Filosofia</div>
+    <h2 class="section-title reveal">Cada peça conta<br><em>uma história.</em></h2>
+    <blockquote class="about-quote reveal">
+      "Consertamos aquilo que o tempo rasga."
+    </blockquote>
+    <p class="about-body reveal">
+      Acreditamos que uma peça bem-feita merece ser preservada. Com anos de experiência em costura artesanal, devolvemos vida às suas roupas favoritas com precisão, carinho e respeito pela qualidade original de cada peça.
+    </p>
+  </div>
+  <div class="about-right">
+    <div class="about-feature reveal">
+      <div class="feature-icon">✂️</div>
+      <div class="feature-content">
+        <h4>Experiência Artesanal</h4>
+        <p>Cada conserto é feito à mão com atenção aos detalhes, respeitando a originalidade da peça.</p>
+      </div>
+    </div>
+    <div class="about-feature reveal">
+      <div class="feature-icon">⚡</div>
+      <div class="feature-content">
+        <h4>Atendimento Ágil</h4>
+        <p>Respondemos rápido e entregamos no prazo. Seu tempo é valioso e levamos isso a sério.</p>
+      </div>
+    </div>
+    <div class="about-feature reveal">
+      <div class="feature-icon">🏠</div>
+      <div class="feature-content">
+        <h4>Coleta & Entrega</h4>
+        <p>Buscamos e devolvemos na sua casa ou trabalho. Praticidade do início ao fim.</p>
+      </div>
+    </div>
+    <div class="about-feature reveal">
+      <div class="feature-icon">💎</div>
+      <div class="feature-content">
+        <h4>Qualidade Garantida</h4>
+        <p>Utilizamos materiais de primeira linha para garantir durabilidade e um acabamento impecável.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="servicos">
+  <div class="services-header">
+    <div>
+      <div class="section-eyebrow reveal">O Que Fazemos</div>
+      <h2 class="section-title reveal">Nossos<br><em>Serviços</em></h2>
+    </div>
+    <p class="services-desc reveal">
+      Do simples ao complexo, cada serviço é executado com a mesma dedicação e capricho que sua roupa merece. Trabalhamos com todos os tipos de tecidos e modelagens.
+    </p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <div class="service-num">01</div>
+      <div class="service-icon">👖</div>
+      <h3 class="service-name">Conserto de Calças</h3>
+      <p class="service-desc">Barras, costuras abertas, ajustes de cós, reparos em tecidos e muito mais. Devolvemos o caimento perfeito da sua calça favorita.</p>
+      <span class="service-tag">Saiba mais →</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">02</div>
+      <div class="service-icon">🧥</div>
+      <h3 class="service-name">Conserto de Jaquetas</h3>
+      <p class="service-desc">Zíperes, forros, bolsos, costuras e reparos estruturais para jaquetas de todos os estilos — couro, tecido, nylon e mais.</p>
+      <span class="service-tag">Saiba mais →</span>
+    </div>
+    <div class="service-card reveal">
+      <div class="service-num">03</div>
+      <div class="service-icon">✨</div>
+      <h3 class="service-name">Ajustes Personalizados</h3>
+      <p class="service-desc">Serviços sob medida para peças delicadas ou específicas. Cada trabalho é tratado de forma única, com atenção total à peça.</p>
+      <span class="service-tag">Saiba mais →</span>
+    </div>
+  </div>
+</section>
+
+<!-- PRICES -->
+<section class="prices" id="precos">
+  <div class="prices-layout">
+    <div class="prices-left">
+      <div class="section-eyebrow reveal">Investimento</div>
+      <h2 class="section-title reveal">Preços<br><em>Justos</em></h2>
+      <div class="prices-note reveal">
+        Os valores são a partir de. O preço final pode variar de acordo com o estado da peça e a complexidade do serviço. Orçamento gratuito e sem compromisso.
+      </div>
+    </div>
+    <div class="price-list">
+      <div class="price-item reveal">
+        <div class="price-item-left">
+          <span class="price-name">Cerzido de Jeans</span>
+          <span class="price-detail">Furos, rasgados e desgastes no jeans</span>
+        </div>
+        <div class="price-tag">
+          <span class="price-from">a partir de</span>
+          <span class="price-value"><span class="price-currency">R$</span> 15</span>
+        </div>
+      </div>
+      <div class="price-item reveal">
+        <div class="price-item-left">
+          <span class="price-name">Troca de Zíper</span>
+          <span class="price-detail">Calças, jaquetas, mochilas e bolsos</span>
+        </div>
+        <div class="price-tag">
+          <span class="price-from">a partir de</span>
+          <span class="price-value"><span class="price-currency">R$</span> 15</span>
+        </div>
+      </div>
+      <div class="price-item reveal">
+        <div class="price-item-left">
+          <span class="price-name">Barras de Calça</span>
+          <span class="price-detail">Jeans, social, casual e esportiva</span>
+        </div>
+        <div class="price-tag">
+          <span class="price-from">a partir de</span>
+          <span class="price-value"><span class="price-currency">R$</span> 15</span>
+        </div>
+      </div>
+      <div class="price-item reveal">
+        <div class="price-item-left">
+          <span class="price-name">Rebitagem & Forro de Bolso</span>
+          <span class="price-detail">Troca completa de forro e rebitagem</span>
+        </div>
+        <div class="price-tag">
+          <span class="price-from">a partir de</span>
+          <span class="price-value"><span class="price-currency">R$</span> 25</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DELIVERY -->
+<section class="delivery-banner" id="coleta">
+  <div>
+    <div class="section-eyebrow reveal">Comodidade Total</div>
+    <h2 class="section-title reveal">Coleta &<br><em>Entrega</em></h2>
+    <p class="delivery-body reveal">
+      Não precisa sair de casa. Buscamos sua peça, realizamos o serviço com cuidado e devolvemos como nova — direto na sua porta, no horário que for melhor para você.
+    </p>
+  </div>
+  <div class="delivery-steps">
+    <div class="delivery-step reveal">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Entre em Contato</h4>
+        <p>Fale pelo WhatsApp e descreva o serviço. Orçamento grátis e rápido.</p>
+      </div>
+    </div>
+    <div class="delivery-step reveal">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Agendamos a Coleta</h4>
+        <p>Buscamos sua peça no local e horário combinados, sem custo adicional.</p>
+      </div>
+    </div>
+    <div class="delivery-step reveal">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Serviço Realizado</h4>
+        <p>Executamos o reparo com precisão e enviamos fotos do resultado.</p>
+      </div>
+    </div>
+    <div class="delivery-step reveal">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Entrega na sua Porta</h4>
+        <p>Devolvemos pronta e como nova. Simples assim.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <p class="cta-pre reveal">Pronto para recuperar sua peça?</p>
+  <h2 class="cta-title reveal">Dê nova vida às suas<br><em>roupas favoritas</em></h2>
+  <p class="cta-body reveal">
+    Atendimento rápido, confiável e com coleta em domicílio. Entre em contato agora e receba um orçamento gratuito.
+  </p>
+  <div class="cta-buttons reveal">
+    <a href="https://wa.me/5541995777474" class="btn-whatsapp">📱 Chamar no WhatsApp</a>
+    <a href="#servicos" class="btn-outline">Ver Todos os Serviços</a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <div class="footer-brand">Costura <span>&</span> Arte</div>
+      <p class="footer-tagline">
+        "Consertamos aquilo que o tempo rasga."<br>
+        Qualidade, cuidado e coleta em domicílio.
+      </p>
+    </div>
+    <div class="footer-col">
+      <h5>Serviços</h5>
+      <ul>
+        <li>Conserto de Calças</li>
+        <li>Conserto de Jaquetas</li>
+        <li>Ajustes Personalizados</li>
+        <li>Troca de Zíper</li>
+        <li>Barras de Calça</li>
+        <li>Cerzido de Jeans</li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contato</h5>
+      <ul>
+        <li>📱 WhatsApp</li>
+        <li>🏠 Coleta em Domicílio</li>
+        <li>⚡ Resposta Rápida</li>
+        <li>💬 Orçamento Grátis</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Ateliê Santos & Bolsos — Todos os direitos reservados.</span>
+    <span class="footer-copy">✂ Feito com cuidado e dedicação</span>
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Nav scroll effect
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      nav.style.boxShadow = '0 4px 30px rgba(0,0,0,0.1)';
+    } else {
+      nav.style.boxShadow = 'none';
+    }
+  });
+</script>
+</body>
+</html>
